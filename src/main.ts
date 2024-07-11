@@ -34,8 +34,8 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle('Basic microservice')
-    .setDescription('This microservice handle basic project information, so this save and search information')
+    .setTitle('Product API')
+    .setDescription('This microservice handle basic products information, so this save and search information')
     .setVersion('1.0')
     .addBearerAuth(
       { 

@@ -9,6 +9,7 @@ export enum ErrorMessages {
     UNAUTHORIZED_EXCEPTION = 'Unauthorized exception',
     TOKEN_EXPIRED = 'El token expiró',
     FORBIDDEN = 'Forbbiden resource',
-    RESOURCE_NOTFOUND ='Datos o recursos no encontrados',
-    API_RESPONSE_EXCEPTION = 'Error en comunicación con servicio externo'
+    RESOURCE_NOT_FOUND = 'Recurso no encontrado',
+    API_RESPONSE_EXCEPTION = 'Error en comunicación con servicio externo',
+    BAD_REQUEST = 'Bad request'
 }
