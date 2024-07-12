@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, UseGuards, Headers } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, UseGuards, Headers, Query } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -9,6 +9,7 @@ import { RoleGuard } from 'src/auth/role/role.guard';
 import { ErrorMessages, SuccessMessages } from 'src/common/enums';
 import { CreateProductSchema } from './schema/create-product.schema';
 import { ProductPaginationFilterSchema } from './schema/product-pagination-filter.schema';
+import { ProductPaginationAndFilterDto } from './dto/product-pagination-and-filter.dto';
 
 @ApiTags('Product')
 @ApiBearerAuth("access-token")
@@ -35,12 +36,11 @@ export class ProductsController {
   @RolesDec(Roles.STORE)
   @UseGuards(RoleGuard)
   @Get()
-  async findAll(@Headers('Authorization') request:any) {
+  async findAll(@Query() paginationDto:ProductPaginationAndFilterDto,@Headers('Authorization') request:any) {
     const jwt = request.replace('Bearer ', '');
 
     return {
-      "nomberofproducts": await this.productsService.count(jwt),
-      "products": await this.productsService.findAll(jwt)
+      "data": await this.productsService.findAll(jwt,paginationDto)
     }
   }
 

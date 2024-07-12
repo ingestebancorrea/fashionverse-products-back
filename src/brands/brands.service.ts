@@ -27,7 +27,7 @@ export class BrandsService {
         }
       });
 
-      return brand.id;
+      return brand.name;
   }
 
 }

@@ -2,7 +2,7 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
 import { ProductstatesService } from 'src/productstates/productstates.service';
 import { InventoriesService } from 'src/inventories/inventories.service';
@@ -10,6 +10,7 @@ import { ErrorMessages, SuccessMessages } from 'src/common/enums';
 import { UsersService } from 'src/users/user.service';
 import { CategoriesService } from 'src/categories/categories.service';
 import { BrandsService } from 'src/brands/brands.service';
+import { ProductPaginationAndFilterDto } from './dto/product-pagination-and-filter.dto';
 
 @Injectable()
 export class ProductsService {
@@ -58,23 +59,20 @@ export class ProductsService {
     
   }
 
-  async count(token: string){
-    const userUuid = await this.userService.extractIdUserOfToken(token);
-
-    return await this.productRepository.count({
-      where: {
-        user_uuid: userUuid
-      }
-    });
-  }
-
-  async findAll(token: string) {
+  async findAll(token: string, paginationDto:ProductPaginationAndFilterDto) {
+    const { limit = 5, offset = 0, name, category_id, brand_id } = paginationDto;
     const userUuid = await this.userService.extractIdUserOfToken(token);
     const arrayProduct =[];
     const productsSaved = await this.productRepository.find({
       where: {
-        user_uuid: userUuid
-      }
+        user_uuid: userUuid,
+        name: name && Like(`%${name}%`),
+        category_id: category_id && category_id,
+        brand_id: brand_id && brand_id
+      },
+      skip: offset,
+      take: limit,
+      order: { id: 'DESC' }
     });
 
     for(const product of productsSaved){

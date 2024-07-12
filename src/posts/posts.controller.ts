@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, UseGuards, Headers } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, UseGuards, Headers, Query } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -9,6 +9,7 @@ import { Roles } from 'src/common/enums/roles.enum';
 import { RoleGuard } from 'src/auth/role/role.guard';
 import { CreatePostSchema } from './schema/create-post.schema';
 import { PostPaginationFilterSchema } from './schema/post-pagination-filter.schema';
+import { PostPaginationAndFilterDto } from './dto/post-pagination-and-filter.dto';
 
 @ApiTags('Post')
 @ApiBearerAuth("access-token")
@@ -35,12 +36,11 @@ export class PostsController {
   @RolesDec(Roles.STORE)
   @UseGuards(RoleGuard)
   @Get()
-  async findAll(@Headers('Authorization') request:any) {
+  async findAll(@Query() paginationDto:PostPaginationAndFilterDto, @Headers('Authorization') request:any) {
     const jwt = request.replace('Bearer ', '');
 
     return {
-      "nomberofposts": await this.postsService.count(jwt),
-      "posts": await this.postsService.findAll(jwt)
+      "data": await this.postsService.findAll(jwt, paginationDto)
     }
   }
 

@@ -2,13 +2,14 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { Post } from './entities/post.entity';
 import { ErrorMessages, SuccessMessages } from 'src/common/enums';
 import { UsersService } from '../users/user.service';
 import { PosttypesService } from 'src/posttypes/posttypes.service';
 import { PostdetailsService } from 'src/postdetails/postdetails.service';
 import { CommentsService } from 'src/comments/comments.service';
+import { PostPaginationAndFilterDto } from './dto/post-pagination-and-filter.dto';
 
 @Injectable()
 export class PostsService {
@@ -42,23 +43,19 @@ export class PostsService {
     }
   }
 
-  async count(token: string) {
-    const userUuid = await this.userService.extractIdUserOfToken(token);
-
-    return await this.postRepository.count({
-      where: {
-        user_uuid: userUuid
-      }
-    });
-  }
-
-  async findAll(token: string) {
+  async findAll(token: string, paginationDto:PostPaginationAndFilterDto) {
+    const { limit = 5, offset = 0, description, posttype_id } = paginationDto;
     const userUuid = await this.userService.extractIdUserOfToken(token);
     const arrayPost =[];
     const postSaved = await this.postRepository.find({
       where: {
-        user_uuid: userUuid
-      }
+        user_uuid: userUuid,
+        description: description && Like(`%${description}%`),
+        posttype_id: posttype_id && posttype_id
+      },
+      skip: offset,
+      take: limit,
+      order: { id: 'DESC' }
     });
 
     for(const post of postSaved){
