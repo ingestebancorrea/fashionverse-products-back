@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, UseGuards, Headers, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, UseGuards, Headers, Query, UseInterceptors, UploadedFiles } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -10,12 +10,17 @@ import { ErrorMessages, SuccessMessages } from 'src/common/enums';
 import { CreateProductSchema } from './schema/create-product.schema';
 import { ProductPaginationFilterSchema } from './schema/product-pagination-filter.schema';
 import { ProductPaginationAndFilterDto } from './dto/product-pagination-and-filter.dto';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { CreateFolderStructureDto } from './dto/create-folder-structure.dto';
+import { SearchImagesDto } from './dto/serach-images.dto';
 
 @ApiTags('Product')
 @ApiBearerAuth("access-token")
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(
+    private readonly productsService: ProductsService,
+  ) {}
 
   @ApiResponse({status:201, description: SuccessMessages.PRODUCT_CREATED, schema: { type: 'object', example: CreateProductSchema }, isArray: true })
   @ApiResponse({status:400, description: ErrorMessages.BAD_REQUEST})
@@ -54,4 +59,26 @@ export class ProductsController {
     return this.productsService.update(+id, updateProductDto);
   }
 
+  @ApiResponse({status:201, description: SuccessMessages.FILED_CHARGED })
+  @ApiResponse({status:400, description: ErrorMessages.BAD_REQUEST})
+  @ApiResponse({status:401, description: ErrorMessages.NOT_VALID_TOKEN})
+  @ApiResponse({status:500, description: ErrorMessages.APPLICATION_ERROR})
+  @RolesDec(Roles.STORE)
+  @UseGuards(RoleGuard)
+  @Post('upload')
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'files', maxCount: 10 }]))
+  async uploadFiles( @Body() createFolderStructureDto:CreateFolderStructureDto, @UploadedFiles() filesObject: { files: Express.Multer.File[] }): Promise<any> {
+    return await this.productsService.uploadFiles(createFolderStructureDto,filesObject);
+  }
+
+  @ApiResponse({status:200, description: SuccessMessages.SUCCESS_RETURN })
+  @ApiResponse({status:401, description: ErrorMessages.NOT_VALID_TOKEN})
+  @ApiResponse({status:500, description: ErrorMessages.APPLICATION_ERROR})
+  @RolesDec(Roles.STORE)
+  @UseGuards(RoleGuard)
+  @Get('images/:category/:brand')
+  async listFiles(@Param() prefixes:SearchImagesDto){
+    return await this.productsService.listFiles(prefixes);
+  }
+ 
 }

@@ -4,5 +4,6 @@ export enum SuccessMessages {
     PRODUCT_CREATED = 'The product was created successfully',
     POST_CREATED = 'The post was created successfully',
     POST_DETAIL_CREATED = 'The post detail was created successfully',
-    COMMENT_CREATED = 'The comment was created successfully'
+    COMMENT_CREATED = 'The comment was created successfully',
+    FILED_CHARGED = 'The file was charged successfully'
 }

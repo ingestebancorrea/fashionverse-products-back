@@ -19,6 +19,7 @@ import { PosttypesModule } from './posttypes/posttypes.module';
 import { PostdetailsModule } from './postdetails/postdetails.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { CommentsModule } from './comments/comments.module';
+import { StoresModule } from './stores/stores.module';
 
 @Module({
   imports: [
@@ -35,7 +36,7 @@ import { CommentsModule } from './comments/comments.module';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        ssl: true,
+        // ssl: true,
         //entities: [__dirname + '\\**\\entities\\*.entity{.ts,.js}'], //[__dirname + '/**/*.entity{.ts,.js}'
         // extra: (process.env?.DB_TLS_SSL && process.env?.DB_TLS_SSL === 'true') ? { "ssl": "true" } : {},       
         synchronize: false,
@@ -57,7 +58,8 @@ import { CommentsModule } from './comments/comments.module';
     PosttypesModule,
     PostdetailsModule,
     ReviewsModule,
-    CommentsModule
+    CommentsModule,
+    StoresModule
   ],
   providers:[
     {

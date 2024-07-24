@@ -26,7 +26,7 @@ export class CategoriesService {
         }
       });
 
-    return category.name
+    return category?.name
   }
 
 }
