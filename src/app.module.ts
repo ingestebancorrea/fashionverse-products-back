@@ -36,7 +36,7 @@ import { StoresModule } from './stores/stores.module';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        // ssl: true,
+        ssl: true,
         //entities: [__dirname + '\\**\\entities\\*.entity{.ts,.js}'], //[__dirname + '/**/*.entity{.ts,.js}'
         // extra: (process.env?.DB_TLS_SSL && process.env?.DB_TLS_SSL === 'true') ? { "ssl": "true" } : {},       
         synchronize: false,
