@@ -16,6 +16,15 @@ class CreateProductDto {
 }
 __decorate([
     (0, swagger_1.ApiProperty)({
+        name: 'name',
+        description: 'Store',
+    }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], CreateProductDto.prototype, "name", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
         name: 'category_id',
         type: Number,
         description: '1',
@@ -67,5 +76,14 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", Array)
 ], CreateProductDto.prototype, "inventories", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        name: 'image_url',
+        description: 'Image url',
+    }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], CreateProductDto.prototype, "image_url", void 0);
 exports.CreateProductDto = CreateProductDto;
 //# sourceMappingURL=create-product.dto.js.map

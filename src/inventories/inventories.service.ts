@@ -16,21 +16,26 @@ export class InventoriesService {
     private readonly inventoryStateService:InventorystatesService
   ){}
 
-  async create(createInventoryDto: CreateInventoryDto,productId: string) {
-    try{
-      const idInventoryState = (await this.inventoryStateService.findByAlias("DIS")).id;
-
+  async create(createInventoryDto: CreateInventoryDto, productId: string) {
+    try {
+      const inventoryState = await this.inventoryStateService.findByAlias("DIS");
+      if (!inventoryState) {
+        throw new Error('Inventory state not found for alias DIS');
+      }
+      
+      const idInventoryState = inventoryState.id;
+  
       const inventoryObject = this.inventoryRepository.create(createInventoryDto);
       inventoryObject.inventorystate_id = idInventoryState;
       inventoryObject.product_id = +productId;
       
       await this.inventoryRepository.save(inventoryObject);
-    }catch(error){
+    } catch (error) {
       console.log('Error:', error);
       throw new InternalServerErrorException(error);
     }
   }
-
+  
   async findByProduct(productId: number){
     const sizes = await this.inventoryRepository
       .createQueryBuilder('i')

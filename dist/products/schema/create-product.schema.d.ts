@@ -9,4 +9,4 @@ export declare const CreateProductSchema: {
         available_quantity: number;
     }[];
     image_url: string;
-}[];
+};

@@ -26,7 +26,11 @@ let InventoriesService = class InventoriesService {
     }
     async create(createInventoryDto, productId) {
         try {
-            const idInventoryState = (await this.inventoryStateService.findByAlias("DIS")).id;
+            const inventoryState = await this.inventoryStateService.findByAlias("DIS");
+            if (!inventoryState) {
+                throw new Error('Inventory state not found for alias DIS');
+            }
+            const idInventoryState = inventoryState.id;
             const inventoryObject = this.inventoryRepository.create(createInventoryDto);
             inventoryObject.inventorystate_id = idInventoryState;
             inventoryObject.product_id = +productId;

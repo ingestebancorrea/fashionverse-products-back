@@ -35,22 +35,20 @@ let ProductsService = class ProductsService {
         this.brandService = brandService;
         this.storesService = storesService;
     }
-    async create(token, createProductsDto) {
+    async create(token, createProductDto) {
         try {
-            for (const createProductDto of createProductsDto) {
-                const userUuid = await this.userService.extractIdUserOfToken(token);
-                const idProductState = (await this.productStateService.findByAlias("ACT")).id;
-                const objProduct = this.productRepository.create(createProductDto);
-                objProduct.productstate_id = idProductState;
-                objProduct.user_uuid = userUuid;
-                const productSaved = await this.productRepository.save(objProduct);
-                for (const inventory of createProductDto.inventories) {
-                    const objInventory = {
-                        "size_id": inventory.size_id,
-                        "available_quantity": inventory.available_quantity
-                    };
-                    await this.inventoryService.create(objInventory, productSaved.id.toString());
-                }
+            const userUuid = await this.userService.extractIdUserOfToken(token);
+            const idProductState = (await this.productStateService.findByAlias("ACT")).id;
+            const objProduct = this.productRepository.create(createProductDto);
+            objProduct.productstate_id = idProductState;
+            objProduct.user_uuid = userUuid;
+            const productSaved = await this.productRepository.save(objProduct);
+            for (const inventory of createProductDto.inventories) {
+                const objInventory = {
+                    "size_id": inventory.size_id,
+                    "available_quantity": inventory.available_quantity
+                };
+                await this.inventoryService.create(objInventory, productSaved.id.toString());
             }
             return {
                 statusCode: 201,

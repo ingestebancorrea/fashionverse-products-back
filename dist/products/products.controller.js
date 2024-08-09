@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductsController = void 0;
 const common_1 = require("@nestjs/common");
 const products_service_1 = require("./products.service");
+const create_product_dto_1 = require("./dto/create-product.dto");
 const update_product_dto_1 = require("./dto/update-product.dto");
 const swagger_1 = require("@nestjs/swagger");
 const role_decorator_1 = require("../auth/role/role.decorator");
@@ -55,7 +56,7 @@ let ProductsController = class ProductsController {
     }
 };
 __decorate([
-    (0, swagger_1.ApiResponse)({ status: 201, description: enums_1.SuccessMessages.PRODUCT_CREATED, schema: { type: 'object', example: create_product_schema_1.CreateProductSchema }, isArray: true }),
+    (0, swagger_1.ApiResponse)({ status: 201, description: enums_1.SuccessMessages.PRODUCT_CREATED, schema: { type: 'object', example: create_product_schema_1.CreateProductSchema }, isArray: false }),
     (0, swagger_1.ApiResponse)({ status: 400, description: enums_1.ErrorMessages.BAD_REQUEST }),
     (0, swagger_1.ApiResponse)({ status: 401, description: enums_1.ErrorMessages.NOT_VALID_TOKEN }),
     (0, swagger_1.ApiResponse)({ status: 500, description: enums_1.ErrorMessages.APPLICATION_ERROR }),
@@ -65,7 +66,7 @@ __decorate([
     __param(0, (0, common_1.Headers)('Authorization')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Array]),
+    __metadata("design:paramtypes", [Object, create_product_dto_1.CreateProductDto]),
     __metadata("design:returntype", Promise)
 ], ProductsController.prototype, "create", null);
 __decorate([

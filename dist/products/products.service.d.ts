@@ -22,7 +22,7 @@ export declare class ProductsService {
     private readonly brandService;
     private readonly storesService;
     constructor(productRepository: Repository<Product>, productStateService: ProductstatesService, inventoryService: InventoriesService, userService: UsersService, categoryService: CategoriesService, brandService: BrandsService, storesService: StoresService);
-    create(token: string, createProductsDto: CreateProductDto[]): Promise<{
+    create(token: string, createProductDto: CreateProductDto): Promise<{
         statusCode: number;
         message: SuccessMessages;
     }>;

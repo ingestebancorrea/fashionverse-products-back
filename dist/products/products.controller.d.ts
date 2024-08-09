@@ -9,7 +9,7 @@ import { SearchImagesDto } from './dto/serach-images.dto';
 export declare class ProductsController {
     private readonly productsService;
     constructor(productsService: ProductsService);
-    create(request: any, createProductsDto: CreateProductDto[]): Promise<{
+    create(request: any, createProductsDto: CreateProductDto): Promise<{
         statusCode: number;
         message: SuccessMessages;
     }>;
