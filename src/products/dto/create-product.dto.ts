@@ -5,6 +5,14 @@ import { CreateInventoryDto } from "src/inventories/dto/create-inventory.dto";
 export class CreateProductDto {
 
     @ApiProperty({
+        name: 'name',
+        description: 'Store',
+    })
+    @IsString()
+    @IsNotEmpty()
+    name: string;
+
+    @ApiProperty({
         name: 'category_id',
         type: Number,
         description: '1',
@@ -51,5 +59,13 @@ export class CreateProductDto {
     @IsArray()
     @IsNotEmpty()
     inventories: CreateInventoryDto[];
+
+    @ApiProperty({
+        name: 'image_url',
+        description: 'Image url',
+    })
+    @IsString()
+    @IsNotEmpty()
+    image_url: string;
 
 }
