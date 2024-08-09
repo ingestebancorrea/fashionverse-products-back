@@ -22,14 +22,14 @@ export class ProductsController {
     private readonly productsService: ProductsService,
   ) {}
 
-  @ApiResponse({status:201, description: SuccessMessages.PRODUCT_CREATED, schema: { type: 'object', example: CreateProductSchema }, isArray: true })
+  @ApiResponse({status:201, description: SuccessMessages.PRODUCT_CREATED, schema: { type: 'object', example: CreateProductSchema }, isArray: false })
   @ApiResponse({status:400, description: ErrorMessages.BAD_REQUEST})
   @ApiResponse({status:401, description: ErrorMessages.NOT_VALID_TOKEN})
   @ApiResponse({status:500, description: ErrorMessages.APPLICATION_ERROR})
   @RolesDec(Roles.STORE)
   @UseGuards(RoleGuard)
   @Post()
-  async create(@Headers('Authorization') request:any, @Body() createProductsDto: CreateProductDto[]) {
+  async create(@Headers('Authorization') request:any, @Body() createProductsDto: CreateProductDto) {
     const jwt = request.replace('Bearer ', '');
     return await this.productsService.create(jwt,createProductsDto);
   }

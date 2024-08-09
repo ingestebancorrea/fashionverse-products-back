@@ -27,30 +27,28 @@ export class ProductsService {
     private readonly userService: UsersService,
     private readonly categoryService: CategoriesService,
     private readonly brandService: BrandsService,
-    private readonly storesService:StoresService
+    private readonly storesService: StoresService
   ) { }
 
-  async create(token: string, createProductsDto: CreateProductDto[]) {
+  async create(token: string, createProductDto: CreateProductDto) {
     try {
-      for (const createProductDto of createProductsDto) {
-        const userUuid = await this.userService.extractIdUserOfToken(token);
-        const idProductState = (await this.productStateService.findByAlias("ACT")).id;
+      const userUuid = await this.userService.extractIdUserOfToken(token);
+      const idProductState = (await this.productStateService.findByAlias("ACT")).id;
 
-        const objProduct = this.productRepository.create(createProductDto);
-        objProduct.productstate_id = idProductState;
-        objProduct.user_uuid = userUuid;
+      const objProduct = this.productRepository.create(createProductDto);
+      objProduct.productstate_id = idProductState;
+      objProduct.user_uuid = userUuid;
 
-        const productSaved = await this.productRepository.save(objProduct);
+      const productSaved = await this.productRepository.save(objProduct);
 
-        // Save inventory 
-        for (const inventory of createProductDto.inventories) {
-          const objInventory = {
-            "size_id": inventory.size_id,
-            "available_quantity": inventory.available_quantity
-          }
-
-          await this.inventoryService.create(objInventory, productSaved.id.toString());
+      // Save inventory 
+      for (const inventory of createProductDto.inventories) {
+        const objInventory = {
+          "size_id": inventory.size_id,
+          "available_quantity": inventory.available_quantity
         }
+
+        await this.inventoryService.create(objInventory, productSaved.id.toString());
       }
 
       return {
@@ -133,7 +131,7 @@ export class ProductsService {
       const category = await this.categoryService.findOne(createFolderStructureDto.category_id);
       const brand = await this.brandService.findOne(createFolderStructureDto.brand_id);
       const baseName = `${storeNameReplaced}/${category}/${brand}`;
-  
+
       const uploadResults = await Promise.all(
         files.map(async (file) => {
           const fileName = file.originalname;
@@ -145,17 +143,17 @@ export class ProductsService {
             ACL: "public-read",
             ContentType: file.mimetype
           };
-  
+
           try {
             const s3Response = await s3.upload(params).promise();
-  
+
             return { url: s3Response.Location, ubication: s3Response.Key };
           } catch (e) {
             throw new InternalServerErrorException(e);
           }
         })
       );
-  
+
       return uploadResults;
     } catch (e) {
       console.log("Error:", e);
@@ -163,7 +161,7 @@ export class ProductsService {
     }
   }
 
-  async listFiles(prefixes:SearchImagesDto) {
+  async listFiles(prefixes: SearchImagesDto) {
     const response = {
       result: null
     }
@@ -176,7 +174,7 @@ export class ProductsService {
     });
     const store = await this.storesService.findStoreByUuid();
     const storeNameReplaced = store.name.replace(" ", "_");
-    
+
     const params = {
       Bucket: process.env.AWS_BUCKET_NAME,
       Prefix: `${storeNameReplaced}/${prefixes.category}/${prefixes.brand}/`
@@ -206,7 +204,7 @@ export class ProductsService {
         throw err;
       });
 
-    if(gallery.length === 0)
+    if (gallery.length === 0)
       throw new NotFoundException(ErrorMessages.RESOURCE_NOT_FOUND);
 
     response.result = gallery;
