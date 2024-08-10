@@ -85,7 +85,8 @@ export class ProductsService {
         "category": null,
         "price": product.price,
         "brand": null,
-        "sizes": []
+        "sizes": [],
+        "img": product.image_url
       }
 
       const objCategory = await this.categoryService.findOne(product.category_id);
