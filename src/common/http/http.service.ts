@@ -27,7 +27,7 @@ export class HttpExternalService implements IExternalApi  {
         throw new Error("Method not implemented.");
     }
    
-    async getWithParams(url:string, params:object, token:string):Promise<string>{
+    async getWithParams(url:string, params:object, token:string = null):Promise<string>{
         const config = {}
         config['headers'] = { Authorization: `${token}` };
 

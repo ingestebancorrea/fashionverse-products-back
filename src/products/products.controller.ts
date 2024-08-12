@@ -69,7 +69,6 @@ export class ProductsController {
   @UseInterceptors(FileFieldsInterceptor([{ name: 'files', maxCount: 10 }]))
   async uploadFiles( @Headers('Authorization') request:any, @Body() createFolderStructureDto:CreateFolderStructureDto, @UploadedFiles() filesObject: { files: Express.Multer.File[] }): Promise<any> {
     const jwt = request.replace('Bearer ', '');
-
     return await this.productsService.uploadFiles(jwt,createFolderStructureDto,filesObject);
   }
 
@@ -79,8 +78,9 @@ export class ProductsController {
   @RolesDec(Roles.STORE)
   @UseGuards(RoleGuard)
   @Get('images/:category/:brand')
-  async listFiles(@Param() prefixes:SearchImagesDto){
-    return await this.productsService.listFiles(prefixes);
+  async listFiles(@Headers('Authorization') request:any, @Param() prefixes:SearchImagesDto){
+    const jwt = request.replace('Bearer ', '');
+    return await this.productsService.listFiles(jwt, prefixes);
   }
  
 }

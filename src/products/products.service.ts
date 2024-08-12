@@ -162,7 +162,7 @@ export class ProductsService {
     }
   }
 
-  async listFiles(prefixes: SearchImagesDto) {
+  async listFiles(token: string, prefixes: SearchImagesDto) {
     const response = {
       result: null
     }
@@ -173,7 +173,7 @@ export class ProductsService {
       accessKeyId: process.env.AWS_ACCESS_KEY,
       secretAccessKey: process.env.AWS_SECRET_KEY
     });
-    const store = await this.storesService.findStoreByUuid();
+    const store = await this.storesService.findStoreByUuid(token);
     const storeNameReplaced = store.name.replace(" ", "_");
 
     const params = {
