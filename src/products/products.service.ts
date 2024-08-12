@@ -110,7 +110,7 @@ export class ProductsService {
     return `This action updates a #${id} product`;
   }
 
-  async uploadFiles(createFolderStructureDto: CreateFolderStructureDto, filesObject: { files: Express.Multer.File[] }) {
+  async uploadFiles(token: string, createFolderStructureDto: CreateFolderStructureDto, filesObject: { files: Express.Multer.File[] }) {
     try {
       const files = filesObject.files;
 
@@ -127,7 +127,7 @@ export class ProductsService {
           secretAccessKey: process.env.AWS_SECRET_KEY
         }
       });
-      const store = await this.storesService.findStoreByUuid();
+      const store = await this.storesService.findStoreByUuid(token);
       const storeNameReplaced = store.name.replace(" ", "_");
       const category = await this.categoryService.findOne(createFolderStructureDto.category_id);
       const brand = await this.brandService.findOne(createFolderStructureDto.brand_id);

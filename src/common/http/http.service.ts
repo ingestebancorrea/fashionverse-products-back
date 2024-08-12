@@ -2,7 +2,7 @@ import { REQUEST } from '@nestjs/core';
 import { Inject, Injectable, InternalServerErrorException, Scope } from "@nestjs/common";
 import { IExternalApi } from "./external-api.interface";
 import { HttpService } from "@nestjs/axios";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import { ErrorMessages } from "../enums/error-messages.enum";
 import { Request } from 'express';
 
@@ -27,9 +27,11 @@ export class HttpExternalService implements IExternalApi  {
         throw new Error("Method not implemented.");
     }
    
-    async getWithParams(url:string, params:object, headers:object = null):Promise<string>{
+    async getWithParams(url:string, params:object, token:string):Promise<string>{
         const config = {}
-        this.request.headers.authorization ? config['headers'] = { Authorization: `${this.request.headers.authorization}` } : null;        
+        config['headers'] = { Authorization: `${token}` };
+
+        console.log();        
         try {
             return await axios.get<any>(url,config)
             .then((res) => {

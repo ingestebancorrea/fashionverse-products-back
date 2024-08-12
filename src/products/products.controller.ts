@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, UseGuards, Headers, Query, UseInterceptors, UploadedFiles } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, UseGuards, Headers, Query, UseInterceptors, UploadedFiles, Header } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -67,8 +67,10 @@ export class ProductsController {
   @UseGuards(RoleGuard)
   @Post('upload')
   @UseInterceptors(FileFieldsInterceptor([{ name: 'files', maxCount: 10 }]))
-  async uploadFiles( @Body() createFolderStructureDto:CreateFolderStructureDto, @UploadedFiles() filesObject: { files: Express.Multer.File[] }): Promise<any> {
-    return await this.productsService.uploadFiles(createFolderStructureDto,filesObject);
+  async uploadFiles( @Headers('Authorization') request:any, @Body() createFolderStructureDto:CreateFolderStructureDto, @UploadedFiles() filesObject: { files: Express.Multer.File[] }): Promise<any> {
+    const jwt = request.replace('Bearer ', '');
+
+    return await this.productsService.uploadFiles(jwt,createFolderStructureDto,filesObject);
   }
 
   @ApiResponse({status:200, description: SuccessMessages.SUCCESS_RETURN })
