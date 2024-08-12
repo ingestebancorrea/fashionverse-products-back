@@ -10,8 +10,8 @@ export class StoresService {
         private readonly configService: ConfigService
     ) { }
 
-    async findStoreByUuid(token: string): Promise<any> {
-        return await this.httpExternalService.getWithParams(`${this.configService.get('AUTH_SERVICE')}/stores/by/user`, {}, token)
+    async findStoreByUuid(): Promise<any> {
+        return await this.httpExternalService.getWithParams(`${this.configService.get('AUTH_SERVICE')}/stores/by/user`, {})
     }
 
 }

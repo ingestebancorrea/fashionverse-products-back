@@ -127,7 +127,8 @@ export class ProductsService {
           secretAccessKey: process.env.AWS_SECRET_KEY
         }
       });
-      const store = await this.storesService.findStoreByUuid(token);
+      
+      const store = await this.storesService.findStoreByUuid();
       const storeNameReplaced = store.name.replace(" ", "_");
       const category = await this.categoryService.findOne(createFolderStructureDto.category_id);
       const brand = await this.brandService.findOne(createFolderStructureDto.brand_id);
@@ -173,7 +174,7 @@ export class ProductsService {
       accessKeyId: process.env.AWS_ACCESS_KEY,
       secretAccessKey: process.env.AWS_SECRET_KEY
     });
-    const store = await this.storesService.findStoreByUuid(token);
+    const store = await this.storesService.findStoreByUuid();
     const storeNameReplaced = store.name.replace(" ", "_");
 
     const params = {
@@ -204,7 +205,8 @@ export class ProductsService {
       .catch((err) => {
         throw err;
       });
-
+    
+    console.log("gallery",gallery);
     if (gallery.length === 0)
       throw new NotFoundException(ErrorMessages.RESOURCE_NOT_FOUND);
 

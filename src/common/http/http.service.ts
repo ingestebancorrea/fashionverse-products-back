@@ -27,11 +27,9 @@ export class HttpExternalService implements IExternalApi  {
         throw new Error("Method not implemented.");
     }
    
-    async getWithParams(url:string, params:object, token:string = null):Promise<string>{
+    async getWithParams(url:string, params:object, headers:object = null):Promise<string>{
         const config = {}
-        config['headers'] = { Authorization: `${token}` };
-
-        console.log();        
+        this.request.headers.authorization ? config['headers'] = { Authorization: `${this.request.headers.authorization}` } : null;        
         try {
             return await axios.get<any>(url,config)
             .then((res) => {
@@ -47,6 +45,5 @@ export class HttpExternalService implements IExternalApi  {
         } catch (error) {
             throw new InternalServerErrorException(ErrorMessages.API_RESPONSE_EXCEPTION)        
         }
-        
     }
 } 

@@ -3,7 +3,7 @@ export interface IExternalApi{
 
     getWithQuery(url:string, params:object, headers:object):object
 
-    getWithParams(url:string, params:object, token: string):object
+    getWithParams(url:string, params:object, headers:object):object
 
     patch(url:string, params:object, headers:object):object
 
