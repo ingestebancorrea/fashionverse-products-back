@@ -31,11 +31,14 @@ export class PostsService {
       objPost.likes = 0;
       objPost.user_uuid = userUuid;
 
-      await this.postRepository.save(objPost);
+      const postSaved = await this.postRepository.save(objPost);
 
       return {
         staus_code: 201,
-        message: SuccessMessages.POST_CREATED
+        message: SuccessMessages.POST_CREATED,
+        data: {
+          id: postSaved.id
+        }
       }
     }catch(error){
       console.log(error);
