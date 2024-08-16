@@ -36,9 +36,7 @@ export class PostsService {
       return {
         staus_code: 201,
         message: SuccessMessages.POST_CREATED,
-        data: {
-          id: postSaved.id
-        }
+        id: postSaved.id
       }
     }catch(error){
       console.log(error);
