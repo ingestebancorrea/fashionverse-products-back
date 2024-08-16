@@ -5,7 +5,12 @@ export const PostPaginationFilterSchema = {
             "id": 1,
             "likes": 388,
             "type": "Gratuita",
-            "products": 3,
+            "products": [
+                {
+                    "id": 1,
+                    "image_url": "https://aws.com/Store",
+                }
+            ],
             "comments": 1
         }
     ]

@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Postdetail } from "src/postdetails/entities/postdetail.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('products')
 export class Product {
@@ -46,5 +47,8 @@ export class Product {
         type:'uuid'
     })
     user_uuid: string;
+
+    @OneToMany(() => Postdetail, postdetail => postdetail.product)
+    postdetails: Postdetail[];
 
 }

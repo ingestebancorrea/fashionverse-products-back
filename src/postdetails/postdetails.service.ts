@@ -12,11 +12,11 @@ export class PostdetailsService {
   constructor(
     @InjectRepository(Postdetail)
     private postDetailRepository: Repository<Postdetail>
-  ){}
+  ) { }
 
   async create(createPostdetailDto: CreatePostdetailDto) {
     try {
-      for ( const product of createPostdetailDto.products ) {
+      for (const product of createPostdetailDto.products) {
         const objPostDetail = this.postDetailRepository.create({
           post_id: createPostdetailDto.post_id,
           product_id: product.id
@@ -24,23 +24,37 @@ export class PostdetailsService {
 
         await this.postDetailRepository.save(objPostDetail);
       }
-    
+
       return {
         staus_code: 201,
         message: SuccessMessages.POST_DETAIL_CREATED
       }
-    }catch(error){
+    } catch (error) {
       console.log(error);
       throw new InternalServerErrorException(ErrorMessages.DEFAULT_REQUEST_EXCEPTION);
     }
   }
 
-  async findAndCountProducts(postId: number){
-    return await this.postDetailRepository.count({
-      where: { 
+  async findProductsImage(postId: number) {
+    const results = await this.postDetailRepository.find({
+      relations: {
+        product: true
+      },
+      where: {
         post_id: postId
+      },
+      select: {
+        product: {
+          id: true,
+          image_url: true
+        }
       }
     });
+
+    return results.map(postdetail => ({
+      id: postdetail.product.id,
+      image_url: postdetail.product.image_url
+    }));
   }
 
   findAll() {

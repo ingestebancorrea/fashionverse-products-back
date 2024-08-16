@@ -70,10 +70,10 @@ export class PostsService {
 
       const objPostType = await this.postTypeService.findOne(post.posttype_id);
       postAux["type"] = objPostType ? objPostType : null;
-      const products = await this.postDetailService.findAndCountProducts(post.id);
-      postAux["products"] = products ? products : null;
+      const products = await this.postDetailService.findProductsImage(post.id);
+      postAux["products"] = products ? products : [];
       const comments = await this.commentService.findByPost(post.id);
-      postAux["comments"] = comments ? comments : [];
+      postAux["comments"] = comments ? comments : 0;
 
       arrayPost.push(postAux);
     }
