@@ -1,25 +1,28 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsNumber } from "class-validator";
+import { IsArray, IsNotEmpty, IsNumber } from "class-validator";
+
+interface Products {
+    id: number;
+}
 
 export class CreatePostdetailDto {
 
     @ApiProperty({
-        name: 'product_id',
-        type: Number,
-        description: '1',
-    })
-    @IsNumber()
-    @IsNotEmpty()
-    product_id: number;
-
-    @ApiProperty({
         name: 'post_id',
         type: Number,
-        description: '1',
+        example: '1'
     })
     @IsNumber()
     @IsNotEmpty()
     post_id: number;
 
+    @ApiProperty({
+        name: 'products',
+        type: Number,
+        example: '[{ "id": 1 }]'
+    })
+    @IsArray()
+    @IsNotEmpty()
+    products: Products[];
 
 }

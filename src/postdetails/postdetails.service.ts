@@ -16,9 +16,15 @@ export class PostdetailsService {
 
   async create(createPostdetailDto: CreatePostdetailDto) {
     try {
-      const objPostDetail = this.postDetailRepository.create(createPostdetailDto);
-      await this.postDetailRepository.save(objPostDetail);
+      for ( const product of createPostdetailDto.products ) {
+        const objPostDetail = this.postDetailRepository.create({
+          post_id: createPostdetailDto.post_id,
+          product_id: product.id
+        });
 
+        await this.postDetailRepository.save(objPostDetail);
+      }
+    
       return {
         staus_code: 201,
         message: SuccessMessages.POST_DETAIL_CREATED

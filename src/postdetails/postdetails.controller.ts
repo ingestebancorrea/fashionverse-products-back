@@ -7,6 +7,7 @@ import { ErrorMessages, SuccessMessages } from 'src/common/enums';
 import { RolesDec } from 'src/auth/role/role.decorator';
 import { Roles } from 'src/common/enums/roles.enum';
 import { RoleGuard } from 'src/auth/role/role.guard';
+import { createPostDetailsSchema } from './schemas/create-postdetails.schema';
 
 @ApiTags('Post Details')
 @ApiBearerAuth("access-token")
@@ -14,7 +15,7 @@ import { RoleGuard } from 'src/auth/role/role.guard';
 export class PostdetailsController {
   constructor(private readonly postdetailsService: PostdetailsService) {}
 
-  @ApiResponse({status:201, description: SuccessMessages.POST_DETAIL_CREATED, schema: { type: 'object', example: CreatePostdetailDto }, isArray: true })
+  @ApiResponse({status:201, description: SuccessMessages.POST_DETAIL_CREATED, schema: { type: 'object', example: createPostDetailsSchema }, isArray: true })
   @ApiResponse({status:400, description: ErrorMessages.BAD_REQUEST})
   @ApiResponse({status:401, description: ErrorMessages.NOT_VALID_TOKEN})
   @ApiResponse({status:500, description: ErrorMessages.APPLICATION_ERROR})
