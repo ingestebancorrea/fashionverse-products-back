@@ -13,6 +13,7 @@ import { ProductPaginationAndFilterDto } from './dto/product-pagination-and-filt
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { CreateFolderStructureDto } from './dto/create-folder-structure.dto';
 import { SearchImagesDto } from './dto/serach-images.dto';
+import { ProductWithObjctsSchema } from './schema/product-with-objects.schema';
 
 @ApiTags('Product')
 @ApiBearerAuth("access-token")
@@ -37,6 +38,7 @@ export class ProductsController {
   @ApiResponse({status:200, description: SuccessMessages.OK_RESPONSE, schema: { type: 'object', example: ProductPaginationFilterSchema }, isArray: false })
   @ApiResponse({status:400, description: ErrorMessages.BAD_REQUEST})
   @ApiResponse({status:401, description: ErrorMessages.NOT_VALID_TOKEN})
+  @ApiResponse({status:404, description: ErrorMessages.RESOURCE_NOTFOUND})
   @ApiResponse({status:500, description: ErrorMessages.APPLICATION_ERROR})
   @RolesDec(Roles.STORE)
   @UseGuards(RoleGuard)
@@ -48,10 +50,16 @@ export class ProductsController {
       "data": await this.productsService.findAll(jwt,paginationDto)
     }
   }
-
+  
+  @ApiResponse({status:200, description: SuccessMessages.OK_RESPONSE, schema: { type: 'object', example: ProductWithObjctsSchema }, isArray: false })
+  @ApiResponse({status:400, description: ErrorMessages.BAD_REQUEST})
+  @ApiResponse({status:401, description: ErrorMessages.NOT_VALID_TOKEN})
+  @ApiResponse({status:500, description: ErrorMessages.APPLICATION_ERROR})
+  @RolesDec(Roles.STORE)
+  @UseGuards(RoleGuard)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.productsService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.productsService.findOne(+id);
   }
 
   @Patch(':id')

@@ -1,3 +1,4 @@
+import { Product } from "src/products/entities/product.entity";
 import { Size } from "src/sizes/entities/size.entity";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
@@ -30,5 +31,9 @@ export class Inventory {
     @ManyToOne(() => Size, size => size.inventories)
     @JoinColumn({ name: 'size_id' })
     size: Size;
+
+    @ManyToOne(() => Product, product => product.inventories)
+    @JoinColumn({ name: 'product_id' })
+    product: Product;
     
 }

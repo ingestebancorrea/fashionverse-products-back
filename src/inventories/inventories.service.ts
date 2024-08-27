@@ -51,8 +51,31 @@ export class InventoriesService {
     return `This action returns all inverntories`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} inverntory`;
+  async findOne(productId: number) {
+    const arrayInventory = [];
+    const inventories = await this.inventoryRepository.find({
+      relations: {
+        size: true
+      },
+      where: {
+        product_id: productId
+      }
+    });
+
+    for ( const inventory of inventories ) {
+      const inventoriesAux = {
+        id: inventory.id,
+        size: {
+          id: inventory.size.id,
+          name: inventory.size.name,
+        },
+        available_quantity: inventory.available_quantity
+      }
+
+      arrayInventory.push(inventoriesAux);
+    }
+
+    return arrayInventory;
   }
 
   update(id: number, updateInverntoryDto: UpdateInventoryDto) {

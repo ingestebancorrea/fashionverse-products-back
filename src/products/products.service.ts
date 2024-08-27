@@ -15,6 +15,7 @@ import { S3 } from 'aws-sdk';
 import { CreateFolderStructureDto } from './dto/create-folder-structure.dto';
 import { StoresService } from 'src/stores/stores.service';
 import { SearchImagesDto } from './dto/serach-images.dto';
+import { ResponseProductWithObjectsDto } from './dto/response-product-with-objects.dto';
 
 @Injectable()
 export class ProductsService {
@@ -102,8 +103,36 @@ export class ProductsService {
     return arrayProduct;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(id: number) {
+    const product:Product = await this.productRepository.findOne({
+      relations: {
+        category: true,
+        brand: true
+      },
+      where: { id },
+      order: { id: 'DESC' },
+    });
+
+    if (!product) throw new NotFoundException(ErrorMessages.RESOURCE_NOTFOUND);
+
+    const productAux:ResponseProductWithObjectsDto = {
+      id: product.id,
+      name: product.name,
+      category: {
+        id: product.category.id,
+        name: product.category.name
+      },
+      brand: {
+        id: product.brand.id,
+        name: product.brand.name
+      },
+      inventories: []
+    };
+
+    const inventories = await this.inventoryService.findOne(product.id);
+    productAux.inventories = inventories ? inventories : [];
+
+    return productAux;
   }
 
   update(id: number, updateProductDto: UpdateProductDto) {
