@@ -118,6 +118,7 @@ export class ProductsService {
     const productAux:ResponseProductWithObjectsDto = {
       id: product.id,
       name: product.name,
+      image_url: product.image_url,
       category: {
         id: product.category.id,
         name: product.category.name

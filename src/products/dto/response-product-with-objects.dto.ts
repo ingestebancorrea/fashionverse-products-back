@@ -31,6 +31,13 @@ export class ResponseProductWithObjectsDto extends InventoryDto<InventoryItem> {
     name: string;
 
     @ApiProperty({
+        example: 'Image url',
+        description: 'Image url'
+    })
+    @IsString()
+    image_url: string;
+
+    @ApiProperty({
         example: {"id":1,"name":"Camiseta"},
         description: 'category object'
     })
